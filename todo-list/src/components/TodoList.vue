@@ -5,40 +5,89 @@
         Todo List
         <span>Get things done, one item at a time.</span>
       </h1>
+      <div style="margin: 20px 0px">
+        <p style="margin-bottom: 20px">Partie 1 :</p>
+        <div style="margin-bottom: 20px">
+          <input class="input" type="text" v-model="newOneItem" />
+        </div>
+        <li v-if="newOneItem">{{ newOneItem }}</li>
+      </div>
 
-      <template>
-        <transition-group name="todolist" tag="ul">
-          <li
-          >
-            <!-- <span class="label">{{ item.label }}</span> -->
-            <div class="actions">
-              <button
-                class="btn-picto"
-                type="button"
+      <div style="margin: 20px 0px">
+        <p style="margin-bottom: 20px">Partie 2 :</p>
+        <div style="margin-bottom: 20px">
+          <input
+            class="input"
+            type="text"
+            name="newitem"
+            id="newitem"
+            v-model="newItem"
+          />
+          <button class="button" @click="addItem">Ajouter</button>
+          <ul>
+            <li v-for="(item, index) in items" :key="index">
+              <div
+                style="
+                  display: flex;
+                  width: 100%;
+                  justify-content: space-between;
+                "
               >
-                <i aria-hidden="true" class="material-icons">check</i>
-              </button>
-              <button
-                class="btn-picto"
-                type="button"
-              >
-                <i aria-hidden="true" class="material-icons">delete</i>
-              </button>
-            </div>
-          </li>
-        </transition-group>
-        <togglebutton
-          label="Move done items at the end?"
-          name="todosort"
-        />
-      </template>
-      <!-- <p class="emptylist">Your todo list is empty.</p> -->
-
-      <form name="newform">
-        <label for="newitem">Add to the todo list</label>
-        <input type="text" name="newitem" id="newitem" />
-        <button type="submit">Add item</button>
-      </form>
+                <div @click="editItem(index)">
+                  <div v-if="!editing[index]" style="cursor: pointer">
+                    {{ item }}
+                  </div>
+                  <input
+                    v-else
+                    class="input"
+                    type="text"
+                    v-model="newItemValue"
+                  />
+                </div>
+                <div>
+                  <div class="actions">
+                    <button
+                      class="button"
+                      type="button"
+                      @click="updateItem(index)"
+                    >
+                      modifier
+                    </button>
+                    <button
+                      class="button"
+                      type="button"
+                      @click="deleteItem(item)"
+                    >
+                      delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin: 20px 0px">
+        <p style="margin-bottom: 20px">Partie 3 :</p>
+        <div
+          style="
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+          "
+        >
+          <button @click="toggleColor" class="button">
+            {{ isRed ? "Green" : "Red" }}
+          </button>
+          <div
+            :style="{
+              backgroundColor: isRed ? 'red' : 'green',
+              width: '50px',
+              height: '20px',
+            }"
+          ></div>
+        </div>
+      </div>
     </main>
   </div>
 </template>
@@ -48,6 +97,46 @@ export default {
   name: "TodoList",
   props: {
     title: String,
+  },
+  data() {
+    return {
+      items: [],
+      newItem: "",
+      newOneItem: "",
+      isRed: true,
+      editing: [],
+    };
+  },
+  created() {
+    this.editing = this.initializeEditingState();
+  },
+  methods: {
+    addItem() {
+      this.items.push(this.newItem);
+      this.newItem = "";
+    },
+    toggleColor() {
+      this.isRed = !this.isRed;
+    },
+    deleteItem(item) {
+      let index = this.items.indexOf(item);
+      if (index > -1) {
+        this.items.splice(index, 1);
+      }
+    },
+    initializeEditingState() {
+      return new Array(this.items.length).fill(false);
+    },
+    editItem(index) {
+      this.editing[index] = true;
+    },
+    updateItem(index) {
+      if (this.newItemValue != undefined && this.newItemValue.length > 0) {
+        this.items[index] = this.newItemValue;
+        this.editing[index] = false;
+        this.newItemValue = "";
+      }
+    },
   },
 };
 </script>
@@ -72,15 +161,15 @@ body {
   }
 }
 .container {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    height:90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
 }
 #todolist {
   margin: 4rem auto;
   padding: 2rem 3rem 3rem;
-  max-width: 500px;
+  max-width: 600px;
   background: #ff6666;
   color: #fff;
   box-shadow: -20px -20px 0px 0px rgba(100, 100, 100, 0.1);
@@ -110,6 +199,7 @@ body {
 #todolist ul {
   margin-top: 2.6rem;
   list-style: none;
+  margin-bottom: 20px;
 }
 #todolist .todolist-move {
   transition: transform 1s;
@@ -154,24 +244,25 @@ body {
 }
 
 /* FORM */
-form {
+.form {
   margin-top: 3rem;
   display: flex;
   flex-wrap: wrap;
 }
-form label {
+.label {
   min-width: 100%;
   margin-bottom: 0.5rem;
   font-size: 1.3rem;
 }
-form input {
+.input {
   flex-grow: 1;
   border: none;
   background: #f7f1f1;
   padding: 0 1.5em;
   font-size: initial;
+  height: 30px;
 }
-form button {
+.button {
   padding: 0 1.3rem;
   border: none;
   background: #ff6666;
@@ -182,8 +273,9 @@ form button {
   margin-left: 5px;
   cursor: pointer;
   transition: background 0.2s ease-out;
+  height: 30px;
 }
-form button:hover {
+.button:hover {
   background: #ff5e5e;
 }
 form input,
