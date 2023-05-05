@@ -1,15 +1,15 @@
 <template>
-  <TodoList />
+  <div id="nav">
+    <router-link to="/">TodoList</router-link>
+    <router-link to="/api">Api</router-link>
+  </div>
+  <router-view />
 </template>
 
 <script>
-import TodoList from "./components/TodoList.vue";
-
 export default {
   name: "App",
-  components: {
-    TodoList,
-  },
+  components: {},
 };
 </script>
 
