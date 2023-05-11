@@ -88,11 +88,15 @@
           ></div>
         </div>
       </div>
+      <div style="margin: 20px 0px">
+        <p>Count : {{ count }}</p>
+        <button @click="incrementCount()">incremente</button>
+      </div>
     </main>
   </div>
 </template>
 
-<script>
+<script >
 export default {
   name: "TodoList",
   props: {
@@ -105,6 +109,7 @@ export default {
       newOneItem: "",
       isRed: true,
       editing: [],
+      count: 0,
     };
   },
   created() {
@@ -136,6 +141,9 @@ export default {
         this.editing[index] = false;
         this.newItemValue = "";
       }
+    },
+    incrementCount() {
+      this.count++;
     },
   },
 };

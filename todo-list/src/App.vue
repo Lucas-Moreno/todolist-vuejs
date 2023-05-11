@@ -1,7 +1,10 @@
 <template>
   <div id="nav">
-    <router-link to="/">TodoList</router-link>
-    <router-link to="/api">Api</router-link>
+    <router-link to="/"><p class="nav-element">TodoList</p></router-link>
+    <router-link to="/api"><p class="nav-element">Api</p></router-link>
+    <router-link to="/scriptSetup"
+      ><p class="nav-element">Script Setup</p></router-link
+    >
   </div>
   <router-view />
 </template>
@@ -13,4 +16,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#nav {
+  width: 100vw;
+  display: flex;
+}
+.nav-element {
+  margin-right: 10px;
+}
+</style>
