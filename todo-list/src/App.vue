@@ -5,6 +5,9 @@
     <router-link to="/scriptSetup"
       ><p class="nav-element">Script Setup</p></router-link
     >
+    <router-link to="/querygraphql"
+      ><p class="nav-element">Query graphql</p></router-link
+    >
   </div>
   <router-view />
 </template>

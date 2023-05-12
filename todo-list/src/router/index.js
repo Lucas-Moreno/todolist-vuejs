@@ -4,7 +4,7 @@ import TodoList from '../components/TodoList.vue'
 import Api from '../components/JsonTypeApiRequest.vue'
 import NotFound from '../components/NotFound.vue'
 import ScriptSetupTest from '../components/scriptSetupTest.vue'
-
+import GraphqlTest from '../components/GraphqlTest.vue'
 
 const routes = [
   {
@@ -18,6 +18,10 @@ const routes = [
   {
     path: '/scriptSetup',
     component: ScriptSetupTest
+  },
+  {
+    path: '/querygraphql',
+    component: GraphqlTest
   },
   {
     path: '/:pathMatch(.*)*',
