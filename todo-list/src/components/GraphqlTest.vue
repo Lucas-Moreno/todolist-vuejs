@@ -1,17 +1,18 @@
 <script setup>
-import axios from "axios";
 import { onMounted, ref } from "vue";
+import { request } from "graphql-request";
 import getCatsQuery from "../graphql/cats.gql";
 
-const cats = ref([]);
+let cats = ref([]);
 
 const getCats = async () => {
-  await axios
-    .get("http://localhost:3000/cats", {
-      query: getCatsQuery,
-    })
-    .then((response) => cats.value.push(response.data))
-    .catch((error) => console.error(error));
+  try {
+    request("http://localhost:3000/graphql", getCatsQuery).then((data) => {
+      cats.value = data.cats;
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 onMounted(() => {
@@ -21,12 +22,22 @@ onMounted(() => {
 
 <template>
   <div>
-    <ul>
-      <li v-for="cat in cats" :key="cat.id">
-        {{ cat.name }} ({{ cat.breed }})
-      </li>
-    </ul>
+    <h1>Liste des chats</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Âge</th>
+          <th>Race</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="cat in cats" :key="cat.id">
+          <td>{{ cat.name }}</td>
+          <td>{{ cat.age }}</td>
+          <td>{{ cat.breed }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
-
-<style scoped></style>

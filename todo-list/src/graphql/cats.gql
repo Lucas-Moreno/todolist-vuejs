@@ -1,4 +1,4 @@
-query getCats {
+query GetCats {
   cats {
     id
     name
