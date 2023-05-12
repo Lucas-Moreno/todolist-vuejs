@@ -7,10 +7,10 @@ const cats = ref([]);
 
 const getCats = async () => {
   await axios
-    .post("http://localhost:3000/cats", {
+    .get("http://localhost:3000/cats", {
       query: getCatsQuery,
     })
-    .then((response) => (cats.value = response.data.data.cats))
+    .then((response) => cats.value.push(response.data))
     .catch((error) => console.error(error));
 };
 
